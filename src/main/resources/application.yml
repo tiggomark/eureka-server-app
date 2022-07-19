@@ -1,0 +1,11 @@
+server:
+  port: ${EUREKA_APP_PORT:8761}
+
+spring:
+  application:
+    name: eureka-server-app
+  config:
+    import: ${CONFIG_SERVER_URL:http://localhost:8888/}
+
+
+
