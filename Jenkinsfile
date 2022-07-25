@@ -29,7 +29,8 @@ node {
 
     stage(name: 'Build docker image') {
         echo 'Build docker image and push to registry'
-            sh "docker login -u thomazaudio -p leghacy123"
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            sh "docker login -u $USERNAME -p $PASSWORD"
             pomVersion = getVersion()
             if(environment == "qa") {
                 sh "docker build -f ./Dockerfile --build-arg VERSION=$pomVersion --build-arg APP=$PROJECT_NAME -t ${repositoryUrl}/$PROJECT_NAME:$tagVersion ."
@@ -42,16 +43,16 @@ node {
                 echo "Build complete for version ${tagVersion} and latest release...Upload image to Harbor"
                 sh "docker push ${repositoryUrl}/$PROJECT_NAME:$tagVersion && docker push ${repositoryUrl}/$PROJECT_NAME:$tagVersion"
             }
-
+        }
     }
 
     stage(name: 'Deploy to Docker Container') {
         echo 'Deploying images to docker container'
-        //docker run --network cluster-network -p 8484:8484 --name customer-app -d customer-app:1.0.0
+        sh "docker rm --force $PROJECT_NAME"
         sh "docker run --network cluster-network -p 8761:8761 --name $PROJECT_NAME  -d  ${repositoryUrl}/$PROJECT_NAME:$tagVersion"
         echo "Deploy de ${PROJECT_NAME} para o ambiente ${environment} finalizado com sucesso"
         //sendMsgToSlack("Deploy de ${PROJECT_NAME} para o ambiente ${environment} finalizado com sucesso")
-        //currentBuild.result = "SUCCESS"
+        currentBuild.result = "SUCCESS"
     }
 
 }
