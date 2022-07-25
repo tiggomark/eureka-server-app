@@ -4,7 +4,7 @@ PROJECT_NAME = "eureka-server-app"
 PROJECT_KEY = "tiggomark"
 SCM = "GITHUB"
 
-def repositoryUrl = 'thomazaudio'
+def repositoryUrl = 'tiggomark'
 
 node {
 
