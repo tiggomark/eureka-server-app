@@ -5,5 +5,14 @@ spring:
   application:
     name: eureka-server-app
 
+eureka:
+  instance:
+    hostname: eureka-server-app
+  client:
+    fetchRegistry: true
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone : http://eureka-server-app:8761/eureka/
+
 
 
