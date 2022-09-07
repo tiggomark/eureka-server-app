@@ -35,13 +35,13 @@ node {
             if(environment == "qa") {
                 sh "docker build -f ./Dockerfile --build-arg VERSION=$pomVersion --build-arg APP=$PROJECT_NAME -t ${repositoryUrl}/$PROJECT_NAME:$tagVersion ."
                 echo "Build complete for version $pomVersion develop release...Upload image to Harbor"
-                //sh "docker push ${repositoryUrl}/$PROJECT_NAME:$tagVersion"
+                sh "docker push ${repositoryUrl}/$PROJECT_NAME:$tagVersion"
             } else {
                 tagVersion = getVersion()
                 echo "Initializing build release ${tagVersion}"
                 sh "docker build -f ./Dockerfile --build-arg VERSION=$pomVersion --build-arg APP=$PROJECT_NAME -t ${repositoryUrl}/$PROJECT_NAME:$tagVersion -t ${repositoryUrl}/$PROJECT_NAME:latest ."
                 echo "Build complete for version ${tagVersion} and latest release...Upload image to Harbor"
-                //sh "docker push ${repositoryUrl}/$PROJECT_NAME:$tagVersion && docker push ${repositoryUrl}/$PROJECT_NAME:latest"
+                sh "docker push ${repositoryUrl}/$PROJECT_NAME:$tagVersion && docker push ${repositoryUrl}/$PROJECT_NAME:latest"
             }
         }
     }
